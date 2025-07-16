@@ -274,7 +274,7 @@ const api=process.env.NEXT_PUBLIC_API
                     onChange={(e) => setOtp(e.target.value)}
                     maxLength={6}
                   />
-                  <p className="text-xs text-gray-400 mt-1">Demo OTP: 123456</p>
+                  {/* <p className="text-xs text-gray-400 mt-1">Demo OTP: 123456</p> */}
                 </div>
               )}
 
@@ -307,12 +307,12 @@ const api=process.env.NEXT_PUBLIC_API
                   </Button>
                 </div>
               )}
-
+{/* 
               <div className="text-center text-sm text-gray-400 space-y-1">
                 <p>Demo accounts:</p>
                 <p>student@test.com | school@test.com</p>
                 <p>john.student@gmail.com | admin@school.edu</p>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
