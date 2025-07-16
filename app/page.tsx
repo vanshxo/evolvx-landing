@@ -661,6 +661,7 @@ export default function EVOLVXLanding() {
               onClick={(e) => {
                 e.preventDefault()
                 // Add your social media links here
+                router.push(social.link)
               }}
               className="social-icon w-10 h-10 sm:w-12 sm:h-12 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center cursor-pointer group animate-slide-in-right block"
               style={{

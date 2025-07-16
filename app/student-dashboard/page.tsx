@@ -411,7 +411,7 @@
 
 import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import {
   User,
@@ -427,33 +427,34 @@ import { useRouter } from "next/navigation"
 export default function StudentDashboard() {
   const router = useRouter()
   const [activeTab, setActiveTab] = useState("overview")
-useEffect(()=>{
-  const checkauth=async()=>{
-    const res = await fetch("/api/get-cookies")
-        if (!res.ok) throw new Error("Failed to fetch cookie")
-        const data = await res.json()
-       if(!data.myCookie){
-        window.location.href='/'
-       }
 
-  }
-  checkauth()
-})
-  const handleLogout =async () => {
+  useEffect(() => {
+    const checkauth = async () => {
+      const res = await fetch("/api/get-cookies")
+      if (!res.ok) throw new Error("Failed to fetch cookie")
+      const data = await res.json()
+      if (!data.myCookie) {
+        window.location.href = '/'
+      }
+    }
+    checkauth()
+  }, [])
+
+  const handleLogout = async () => {
     const nextresponse = await fetch("/api/delete-cookies")
     const nextdata = await nextresponse.json()
     if (nextresponse.ok) {
-      window.location.href='/'
+      window.location.href = '/'
     }
   }
 
-  // Reusable Coming Soon card for all tabs
+  // Responsive Coming Soon card
   const ComingSoonCard = ({ title }: { title: string }) => (
-    <Card className="border-[#FF6B00]/20 h-96 flex items-center justify-center">
-      <CardContent className="text-center">
-        <Construction className="h-16 w-16 text-[#FF6B00] mx-auto mb-4" />
-        <h3 className="text-2xl font-bold text-[#0D1B2A] mb-2">{title}</h3>
-        <p className="text-gray-600 font-medium">Coming Soon!</p>
+    <Card className="border-[#FF6B00]/20 h-72 sm:h-80 md:h-96 flex items-center justify-center">
+      <CardContent className="text-center flex flex-col flex-grow items-center justify-center">
+        <Construction className="h-14 w-14 sm:h-16 sm:w-16 text-[#FF6B00] mx-auto mb-4" />
+        <h3 className="text-lg sm:text-2xl font-bold text-[#0D1B2A] mb-2">{title}</h3>
+        <p className="text-gray-600 font-medium text-base sm:text-lg">Coming Soon!</p>
         <p className="text-sm text-gray-500 mt-2">Stay tuned for exciting updates in this section.</p>
       </CardContent>
     </Card>
@@ -463,46 +464,46 @@ useEffect(()=>{
     <div className="min-h-screen bg-gradient-to-br from-[#FFF7EC] to-[#f5f1e8]">
       {/* Header */}
       <header className="bg-white/95 backdrop-blur-md border-b border-[#FF6B00]/10 sticky top-0 z-40">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-2 sm:space-x-4">
               <button
                 onClick={() => router.push("/")}
-                className="text-2xl font-bold gradient-text hover:scale-105 transition-transform duration-300"
+                className="text-xl sm:text-2xl font-bold gradient-text hover:scale-105 transition-transform duration-300"
               >
                 EVOLVX
               </button>
-              <Badge variant="outline" className="border-[#FF6B00] text-[#FF6B00]">
+              <Badge variant="outline" className="border-[#FF6B00] text-[#FF6B00] text-xs sm:text-base py-1 px-2 sm:px-3">
                 Student Dashboard
               </Badge>
             </div>
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-2 sm:space-x-4">
               <Button
                 onClick={() => router.push("/")}
                 variant="outline"
                 size="sm"
-                className="border-gray-300 text-gray-600 hover:bg-gray-100 bg-transparent"
+                className="border-gray-300 text-gray-600 hover:bg-gray-100 bg-transparent px-2 sm:px-4"
               >
                 <Home className="h-4 w-4 mr-2" />
-                Home
+                <span className="hidden xs:inline">Home</span>
               </Button>
               <Button
                 onClick={handleLogout}
                 variant="outline"
                 size="sm"
-                className="border-gray-300 text-gray-600 hover:bg-gray-100 bg-transparent"
+                className="border-gray-300 text-gray-600 hover:bg-gray-100 bg-transparent px-2 sm:px-4"
               >
                 <LogOut className="h-4 w-4 mr-2" />
-                Logout
+                <span className="hidden xs:inline">Logout</span>
               </Button>
             </div>
           </div>
         </div>
       </header>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8 py-6 sm:py-8">
         {/* Navigation Tabs */}
-        <div className="flex space-x-1 mb-8 bg-white/50 p-1 rounded-lg">
+        <div className="flex space-x-1 mb-8 bg-white/50 p-1 rounded-lg overflow-x-auto whitespace-nowrap scrollbar-hide">
           {[
             { id: "overview", label: "Overview", icon: <User className="h-4 w-4" /> },
             { id: "progress", label: "Progress", icon: <BookOpen className="h-4 w-4" /> },
@@ -513,33 +514,37 @@ useEffect(()=>{
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
               className={`flex items-center space-x-2 px-4 py-2 rounded-md transition-all duration-200 ${
-                activeTab === tab.id ? "bg-[#FF6B00] text-white shadow-md" : "text-gray-600 hover:bg-white/70"
+                activeTab === tab.id
+                  ? "bg-[#FF6B00] text-white shadow-md"
+                  : "text-gray-600 hover:bg-white/70"
               }`}
+              style={{ minWidth: 120 }}
             >
               {tab.icon}
-              <span>{tab.label}</span>
+              <span className="text-sm sm:text-base">{tab.label}</span>
             </button>
           ))}
         </div>
 
         {/* Coming Soon Section for Every Tab */}
-        {activeTab === "overview" && (
-          <ComingSoonCard title="Student Overview" />
-        )}
+        <div className="w-full max-w-2xl mx-auto">
+          {activeTab === "overview" && (
+            <ComingSoonCard title="Student Overview" />
+          )}
 
-        {activeTab === "progress" && (
-          <ComingSoonCard title="Your Progress" />
-        )}
+          {activeTab === "progress" && (
+            <ComingSoonCard title="Your Progress" />
+          )}
 
-        {activeTab === "events" && (
-          <ComingSoonCard title="Upcoming Events" />
-        )}
+          {activeTab === "events" && (
+            <ComingSoonCard title="Upcoming Events" />
+          )}
 
-        {activeTab === "achievements" && (
-          <ComingSoonCard title="Achievements" />
-        )}
+          {activeTab === "achievements" && (
+            <ComingSoonCard title="Achievements" />
+          )}
+        </div>
       </div>
     </div>
   )
 }
-
